@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "518784490830",
+    "project_id": "cravel-sih",
+    "storage_bucket": "cravel-sih.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518784490830:android:2a2499b33a396ed359521f",
+        "android_client_info": {
+          "package_name": "com.cravel.ccvi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmLBwp1uZ7_N40CkWz9JCjfH2YAf1Tv3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
