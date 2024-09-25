@@ -1,7 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CreateAccount extends StatelessWidget {
+class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
+
+  @override
+  State<CreateAccount> createState() => _CreateAccountState();
+}
+
+class AuthClass {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  Future<void> register(email, password) async {
+    await auth.createUserWithEmailAndPassword(
+        email: email.toString(), password: password.toString());
+    // await auth.currentUser!.updateDisplayName(name.text);
+  }
+}
+
+class _CreateAccountState extends State<CreateAccount> {
+  String email = "";
+  String password = "";
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +40,7 @@ class CreateAccount extends StatelessWidget {
                 salutations(),
                 informativeText(),
                 logoPicture(),
-                inputFields(),
+                emailInput(),
                 passwordField(),
                 signUpButton(context),
               ],
@@ -31,38 +51,42 @@ class CreateAccount extends StatelessWidget {
     );
   }
 
-  Column inputFields() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: textInput(
-            labelText: "Name",
-            keyboardType: TextInputType.name,
+  Padding signUpButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
+      child: MaterialButton(
+        onPressed: () async {
+          try {
+            await AuthClass().register(email, password);
+            // await auth.currentUser!.updateDisplayName(name.text);
+          } on FirebaseAuthException {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('User already exists or invalid credentials!'),
+                ),
+              );
+            }
+          }
+        },
+        color: const Color(0xff3a57e8),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        padding: const EdgeInsets.all(16),
+        textColor: const Color(0xffffffff),
+        height: 50,
+        minWidth: MediaQuery.of(context).size.width,
+        child: const Text(
+          "Sign up",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.normal,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: textInput(
-            labelText: "Username",
-            keyboardType: TextInputType.name,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: textInput(
-            labelText: "Phone Number",
-            keyboardType: TextInputType.phone,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: textInput(
-            labelText: "Email",
-            keyboardType: TextInputType.emailAddress,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -115,50 +139,59 @@ class CreateAccount extends StatelessWidget {
     );
   }
 
-  TextField textInput({required String labelText, required var keyboardType}) {
-    return TextField(
-      controller: TextEditingController(),
-      keyboardType: keyboardType,
-      obscureText: false,
-      textAlign: TextAlign.start,
-      maxLines: 1,
-      style: const TextStyle(
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.normal,
-        fontSize: 14,
-        color: Color(0xff000000),
-      ),
-      decoration: InputDecoration(
-        disabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        labelText: labelText,
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 16,
-          color: Color(0xff7c7878),
-        ),
-        hintText: "Enter Text",
-        hintStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
+  Padding emailInput() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        onChanged: (value) {
+          setState(
+            () {
+              email = value;
+            },
+          );
+        },
+        keyboardType: TextInputType.emailAddress,
+        obscureText: false,
+        textAlign: TextAlign.start,
+        maxLines: 1,
+        style: const TextStyle(
+          fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
           fontSize: 14,
           color: Color(0xff000000),
         ),
-        filled: true,
-        fillColor: const Color(0x00ffffff),
-        isDense: false,
-        contentPadding: const EdgeInsets.all(0),
+        decoration: InputDecoration(
+          disabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+          ),
+          labelText: "Email",
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+            fontSize: 16,
+            color: Color(0xff7c7878),
+          ),
+          hintText: "Enter Text",
+          hintStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+            fontSize: 14,
+            color: Color(0xff000000),
+          ),
+          filled: true,
+          fillColor: const Color(0x00ffffff),
+          isDense: false,
+          contentPadding: const EdgeInsets.all(0),
+        ),
       ),
     );
   }
@@ -167,7 +200,13 @@ class CreateAccount extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       child: TextField(
-        controller: TextEditingController(),
+        onChanged: (value) {
+          setState(
+            () {
+              password = value;
+            },
+          );
+        },
         obscureText: true,
         textAlign: TextAlign.start,
         maxLines: 1,
@@ -244,55 +283,6 @@ class CreateAccount extends StatelessWidget {
         ),
         textAlign: TextAlign.start,
         overflow: TextOverflow.clip,
-      ),
-    );
-  }
-
-  MaterialButton createAccountButton(BuildContext context) {
-    return MaterialButton(
-      onPressed: () {},
-      color: const Color(0x2d3a57e8),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      padding: const EdgeInsets.all(15),
-      textColor: const Color(0xff3a57e8),
-      height: 50,
-      minWidth: MediaQuery.of(context).size.width,
-      child: const Text(
-        "Create account",
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-          fontStyle: FontStyle.normal,
-        ),
-      ),
-    );
-  }
-
-  Padding signUpButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
-      child: MaterialButton(
-        onPressed: () {},
-        color: const Color(0xff3a57e8),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        padding: const EdgeInsets.all(16),
-        textColor: const Color(0xffffffff),
-        height: 50,
-        minWidth: MediaQuery.of(context).size.width,
-        child: const Text(
-          "Sign up",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            fontStyle: FontStyle.normal,
-          ),
-        ),
       ),
     );
   }

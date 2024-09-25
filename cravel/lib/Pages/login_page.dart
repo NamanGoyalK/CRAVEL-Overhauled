@@ -1,10 +1,30 @@
 import 'package:cravel/Pages/create_account.dart';
 import 'package:cravel/Pages/forgot_password.dart';
-import 'package:cravel/Pages/home_page.dart';
+// import 'package:cravel/Pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class AuthClass {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+}
+
+class _LoginState extends State<Login> {
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  Future<void> signIn(email, password) async {
+    await auth.signInWithEmailAndPassword(
+        email: email.toString(), password: password.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +150,7 @@ class Login extends StatelessWidget {
 
   TextField userNameInput() {
     return TextField(
-      controller: TextEditingController(),
+      controller: email,
       keyboardType: TextInputType.emailAddress,
       obscureText: false,
       textAlign: TextAlign.start,
@@ -180,7 +200,7 @@ class Login extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
       child: TextField(
-        controller: TextEditingController(),
+        controller: password,
         keyboardType: TextInputType.visiblePassword,
         obscureText: true,
         textAlign: TextAlign.start,
@@ -274,7 +294,7 @@ class Login extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const CreateAccount(),
+            builder: (context) => CreateAccount(),
           ),
         );
       },
@@ -302,14 +322,81 @@ class Login extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
       child: MaterialButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePageMain(),
-            ),
-          );
+        onPressed: () async {
+          // if (email.text.isEmpty || password.text.isEmpty) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     const SnackBar(
+          //       content: Text(
+          //         "Enter Email and Password",
+          //         style: TextStyle(
+          //           fontWeight: FontWeight.w700,
+          //           fontStyle: FontStyle.normal,
+          //           fontSize: 14,
+          //           color: Color.fromARGB(255, 245, 245, 245),
+          //         ),
+          //       ),
+          //     ),
+          //   );
+          // }
+          // if (email.text.isNotEmpty && password.text.isNotEmpty && ema) {
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     const SnackBar(
+          //       content: Text(
+          //         "Enter a valid email and password",
+          //         style: TextStyle(
+          //           fontWeight: FontWeight.w700,
+          //           fontStyle: FontStyle.normal,
+          //           fontSize: 14,
+          //           color: Color.fromARGB(255, 245, 245, 245),
+          //         ),
+          //       ),
+          //     ),
+          //   );
+          // }
+          try {
+            await signIn(email.text, password.text);
+          } on FirebaseAuthException {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Invalid email or password'),
+                ),
+              );
+            }
+          }
         },
+
+        // onPressed: () {
+        //   if (email.text.isEmpty) {
+        //     ScaffoldMessenger.of(context).showSnackBar(
+        //       const SnackBar(
+        //         content: Text(
+        //           "Enter Email",
+        //           style: TextStyle(
+        //             fontWeight: FontWeight.w400,
+        //             fontStyle: FontStyle.normal,
+        //             fontSize: 14,
+        //             color: Color(0xffffffff),
+        //           ),
+        //         ),
+        //       ),
+        //     );
+        //   } else {
+        //     AuthClass().signIn(
+        //       email: email.text,
+        //       password: password.text,
+        //       context: context,
+        //       onSuccess: () {
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(
+        //             builder: (context) => const HomePageMain(),
+        //           ),
+        //         );
+        //       },
+        //     );
+        //   }
+        // },
         color: const Color(0xff3a57e8),
         elevation: 0,
         shape: RoundedRectangleBorder(

@@ -1,4 +1,12 @@
+// import 'package:cravel/Pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final auth = FirebaseAuth.instance;
+
+Future<void> signOut() async {
+  await auth.signOut();
+}
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -21,7 +29,7 @@ class ProfilePage extends StatelessWidget {
                 logoPicture(),
                 allTextFields(),
                 passwordField(),
-                editProfileButton(context),
+                logOutButton(context),
               ],
             ),
           ),
@@ -96,23 +104,6 @@ class ProfilePage extends StatelessWidget {
         fontStyle: FontStyle.normal,
         fontSize: 32,
         color: Color(0xff000000),
-      ),
-    );
-  }
-
-  Padding informativeText() {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Text(
-        "Login to Continue",
-        textAlign: TextAlign.start,
-        overflow: TextOverflow.clip,
-        style: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 18,
-          color: Color(0xffa29b9b),
-        ),
       ),
     );
   }
@@ -290,11 +281,18 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Padding editProfileButton(BuildContext context) {
+  Padding logOutButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
       child: MaterialButton(
-        onPressed: () {},
+        onPressed: () async {
+          await signOut();
+          if (FirebaseAuth.instance.currentUser == null) {
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          }
+        },
         color: const Color(0xff3a57e8),
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -305,7 +303,7 @@ class ProfilePage extends StatelessWidget {
         height: 50,
         minWidth: MediaQuery.of(context).size.width,
         child: const Text(
-          "Edit Profile",
+          "Logout",
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,

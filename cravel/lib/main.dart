@@ -1,13 +1,23 @@
+import 'package:cravel/Pages/home_page.dart';
 import 'package:cravel/Pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> main() async {
-  runApp(const MyApp());
+class AuthClass {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  get auth => null;
+}
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +29,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Cravel',
       theme: ThemeData.light(useMaterial3: true),
-      home: const Login(),
+      home: StreamBuilder(
+        stream: AuthClass().authStateChanges,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const HomePageMain();
+          } else {
+            return const Login();
+          }
+        },
+      ),
     );
   }
 }
