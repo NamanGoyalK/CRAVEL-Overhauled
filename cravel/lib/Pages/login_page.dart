@@ -17,6 +17,7 @@ class AuthClass {
 }
 
 class _LoginState extends State<Login> {
+  bool passwordVisible = false;
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
 
@@ -24,6 +25,12 @@ class _LoginState extends State<Login> {
   Future<void> signIn(email, password) async {
     await auth.signInWithEmailAndPassword(
         email: email.toString(), password: password.toString());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = true;
   }
 
   @override
@@ -201,8 +208,8 @@ class _LoginState extends State<Login> {
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
       child: TextField(
         controller: password,
+        obscureText: passwordVisible,
         keyboardType: TextInputType.visiblePassword,
-        obscureText: true,
         textAlign: TextAlign.start,
         maxLines: 1,
         style: const TextStyle(
@@ -242,14 +249,19 @@ class _LoginState extends State<Login> {
           fillColor: const Color(0x00ffffff),
           isDense: false,
           contentPadding: const EdgeInsets.all(0),
-          suffixIcon: GestureDetector(
-            //on tap
-            child: const Icon(
-              Icons.visibility_outlined,
-              color: Color(0xff7b7c82),
-              size: 24,
-            ),
+          suffixIcon: IconButton(
+            icon: Icon(passwordVisible
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined),
+            onPressed: () {
+              setState(
+                () {
+                  passwordVisible = !passwordVisible;
+                },
+              );
+            },
           ),
+          alignLabelWithHint: false,
         ),
       ),
     );
@@ -294,7 +306,7 @@ class _LoginState extends State<Login> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CreateAccount(),
+            builder: (context) => const CreateAccount(),
           ),
         );
       },
@@ -323,45 +335,32 @@ class _LoginState extends State<Login> {
       padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
       child: MaterialButton(
         onPressed: () async {
-          // if (email.text.isEmpty || password.text.isEmpty) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     const SnackBar(
-          //       content: Text(
-          //         "Enter Email and Password",
-          //         style: TextStyle(
-          //           fontWeight: FontWeight.w700,
-          //           fontStyle: FontStyle.normal,
-          //           fontSize: 14,
-          //           color: Color.fromARGB(255, 245, 245, 245),
-          //         ),
-          //       ),
-          //     ),
-          //   );
-          // }
-          // if (email.text.isNotEmpty && password.text.isNotEmpty && ema) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     const SnackBar(
-          //       content: Text(
-          //         "Enter a valid email and password",
-          //         style: TextStyle(
-          //           fontWeight: FontWeight.w700,
-          //           fontStyle: FontStyle.normal,
-          //           fontSize: 14,
-          //           color: Color.fromARGB(255, 245, 245, 245),
-          //         ),
-          //       ),
-          //     ),
-          //   );
-          // }
-          try {
-            await signIn(email.text, password.text);
-          } on FirebaseAuthException {
-            if (context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Invalid email or password'),
+          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+              .hasMatch(email.text)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Enter a valid email",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 245, 245, 245),
+                  ),
                 ),
-              );
+              ),
+            );
+          } else {
+            try {
+              await signIn(email.text, password.text);
+            } on FirebaseAuthException {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Invalid email or password'),
+                  ),
+                );
+              }
             }
           }
         },

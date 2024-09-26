@@ -1,5 +1,23 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:email_otp/email_otp.dart';
+
+void main() {
+  EmailOTP.config(
+    appName: 'Cravel',
+    otpType: OTPType.numeric,
+    emailTheme: EmailTheme.v4,
+  );
+  EmailOTP.setSMTP(
+    host: '<Your-Host-Name>',
+    emailPort: EmailPort.port587,
+    secureType: SecureType.tls,
+    username: '<Your-Email-Address>',
+    password: '<Your-Password>',
+  );
+}
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -12,6 +30,7 @@ class AuthClass {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   final FirebaseAuth auth = FirebaseAuth.instance;
+
   Future<void> register(email, password) async {
     await auth.createUserWithEmailAndPassword(
         email: email.toString(), password: password.toString());
@@ -20,8 +39,16 @@ class AuthClass {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  String email = "";
-  String password = "";
+  bool passwordVisible = false;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +68,9 @@ class _CreateAccountState extends State<CreateAccount> {
                 informativeText(),
                 logoPicture(),
                 emailInput(),
+                verifyEmailButton(),
+                otpField(),
+                optButton(context),
                 passwordField(),
                 signUpButton(context),
               ],
@@ -51,40 +81,124 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Padding signUpButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
-      child: MaterialButton(
-        onPressed: () async {
-          try {
-            await AuthClass().register(email, password);
-            // await auth.currentUser!.updateDisplayName(name.text);
-          } on FirebaseAuthException {
+  Align optButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: TextButton(
+        onPressed: () {
+          EmailOTP.verifyOTP(otp: otpController.text);
+          if (EmailOTP.getOTP() == otpController.text) {
             if (context.mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('User already exists or invalid credentials!'),
+                  content: Text(
+                    "OTP verified successfully",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 245, 245, 245),
+                    ),
+                  ),
+                ),
+              );
+            }
+          } else {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    "Invalid OTP",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 245, 245, 245),
+                    ),
+                  ),
                 ),
               );
             }
           }
         },
-        color: const Color(0xff3a57e8),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+        style: ButtonStyle(
+          overlayColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0x1f000000);
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return const Color(0x0a000000);
+              }
+              if (states.contains(WidgetState.pressed)) {
+                return const Color(0x0d000000);
+              }
+              return null;
+            },
+          ),
         ),
-        padding: const EdgeInsets.all(16),
-        textColor: const Color(0xffffffff),
-        height: 50,
-        minWidth: MediaQuery.of(context).size.width,
         child: const Text(
-          "Sign up",
+          "Verify OTP",
           style: TextStyle(
-            fontSize: 16,
             fontWeight: FontWeight.w700,
             fontStyle: FontStyle.normal,
+            fontSize: 14,
+            color: Color(0xff3a57e8),
           ),
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.clip,
+        ),
+      ),
+    );
+  }
+
+  Padding otpField() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: otpController,
+        keyboardType: TextInputType.emailAddress,
+        obscureText: false,
+        textAlign: TextAlign.start,
+        maxLines: 1,
+        style: const TextStyle(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+          fontSize: 14,
+          color: Color(0xff000000),
+        ),
+        decoration: InputDecoration(
+          disabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+          ),
+          labelText: "OTP",
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+            fontSize: 16,
+            color: Color(0xff7c7878),
+          ),
+          hintText: "Enter OTP",
+          hintStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+            fontSize: 14,
+            color: Color(0xff000000),
+          ),
+          helperText: "You have to verify email before setting up the password",
+          filled: true,
+          fillColor: const Color(0x00ffffff),
+          isDense: false,
+          contentPadding: const EdgeInsets.all(0),
         ),
       ),
     );
@@ -143,13 +257,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
-        onChanged: (value) {
-          setState(
-            () {
-              email = value;
-            },
-          );
-        },
+        controller: emailController,
         keyboardType: TextInputType.emailAddress,
         obscureText: false,
         textAlign: TextAlign.start,
@@ -180,13 +288,15 @@ class _CreateAccountState extends State<CreateAccount> {
             fontSize: 16,
             color: Color(0xff7c7878),
           ),
-          hintText: "Enter Text",
+          hintText: "Enter Email",
           hintStyle: const TextStyle(
             fontWeight: FontWeight.w400,
             fontStyle: FontStyle.normal,
             fontSize: 14,
             color: Color(0xff000000),
           ),
+          helperText:
+              "This Email will be used to login and reset your password",
           filled: true,
           fillColor: const Color(0x00ffffff),
           isDense: false,
@@ -200,14 +310,8 @@ class _CreateAccountState extends State<CreateAccount> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       child: TextField(
-        onChanged: (value) {
-          setState(
-            () {
-              password = value;
-            },
-          );
-        },
-        obscureText: true,
+        controller: passwordController,
+        obscureText: passwordVisible,
         textAlign: TextAlign.start,
         maxLines: 1,
         style: const TextStyle(
@@ -217,72 +321,224 @@ class _CreateAccountState extends State<CreateAccount> {
           color: Color(0xff000000),
         ),
         decoration: InputDecoration(
-          disabledBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+            disabledBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: const BorderSide(color: Color(0xff000000), width: 1),
+            ),
+            labelText: "Password",
+            labelStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.normal,
+              fontSize: 16,
+              color: Color(0xff7c7878),
+            ),
+            hintText: "Set a password",
+            hintStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.normal,
+              fontSize: 14,
+              color: Color(0xff000000),
+            ),
+            helperText: "Password must be at least 6 characters long",
+            filled: true,
+            fillColor: const Color(0x00ffffff),
+            isDense: false,
+            contentPadding: const EdgeInsets.all(0),
+            suffixIcon: IconButton(
+              onPressed: () {
+                setState(
+                  () {
+                    passwordVisible = !passwordVisible;
+                  },
+                );
+              },
+              icon: Icon(
+                passwordVisible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                color: const Color(0xff7c7878),
+              ),
+            )),
+      ),
+    );
+  }
+
+  Align verifyEmailButton() {
+    return Align(
+      alignment: Alignment.center,
+      child: TextButton(
+        onPressed: () async {
+          if (emailController.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Email cannot be empty")));
+            return;
+          }
+          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+              .hasMatch(emailController.text)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Enter a valid email",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 245, 245, 245),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          // FirebaseAuth.instance.currentEmail.sendEmailVerification();
+          if (await EmailOTP.sendOTP(email: emailController.text)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("OTP has been sent")));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Failed to send OTP")));
+          }
+        },
+        style: ButtonStyle(
+          overlayColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+              if (states.contains(WidgetState.focused)) {
+                return const Color(0x1f000000);
+              }
+              if (states.contains(WidgetState.hovered)) {
+                return const Color(0x0a000000);
+              }
+              if (states.contains(WidgetState.pressed)) {
+                return const Color(0x0d000000);
+              }
+              return null;
+            },
           ),
-          focusedBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-          ),
-          labelText: "Password",
-          labelStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontStyle: FontStyle.normal,
-            fontSize: 16,
-            color: Color(0xff7c7878),
-          ),
-          hintText: "Enter Text",
-          hintStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
+        ),
+        child: const Text(
+          "Get OTP",
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
             fontStyle: FontStyle.normal,
             fontSize: 14,
-            color: Color(0xff000000),
+            color: Color(0xff3a57e8),
           ),
-          filled: true,
-          fillColor: const Color(0x00ffffff),
-          isDense: false,
-          contentPadding: const EdgeInsets.all(0),
-          suffixIcon: const Icon(Icons.visibility_outlined,
-              color: Color(0xff7b7c82), size: 24),
+          textAlign: TextAlign.start,
+          overflow: TextOverflow.clip,
         ),
       ),
     );
   }
 
-  TextButton forgotPasswordButton() {
-    return TextButton(
-      onPressed: () {},
-      style: ButtonStyle(
-        overlayColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.focused)) {
-              return const Color(0x1f000000);
+  Padding signUpButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
+      child: MaterialButton(
+        onPressed: () async {
+          if (EmailOTP.getOTP() == otpController.text) {
+            if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                .hasMatch(emailController.text)) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    "Enter a valid email",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 245, 245, 245),
+                    ),
+                  ),
+                ),
+              );
+            } else if (passwordController.text.length < 6) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    "Password must be at least 6 characters",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color.fromARGB(255, 245, 245, 245),
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              try {
+                await AuthClass()
+                    .register(emailController.text, passwordController.text);
+                // FirebaseAuth.instance.email.sendEmailVerification();
+                // await auth.currentUser!.updateDisplayName(name.text);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        "Account created successfully",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontStyle: FontStyle.normal,
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 245, 245, 245),
+                        ),
+                      ),
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                }
+              } on FirebaseAuthException {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content:
+                          Text('User already exists or invalid credentials!'),
+                    ),
+                  );
+                }
+              }
             }
-            if (states.contains(WidgetState.hovered)) {
-              return const Color(0x0a000000);
-            }
-            if (states.contains(WidgetState.pressed)) {
-              return const Color(0x0d000000);
-            }
-            return null;
-          },
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Please verify OTP first.",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 245, 245, 245),
+                  ),
+                ),
+              ),
+            );
+          }
+        },
+        color: const Color(0xff3a57e8),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
         ),
-      ),
-      child: const Text(
-        "Forgot Password?",
-        style: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontStyle: FontStyle.normal,
-          fontSize: 14,
-          color: Color(0xff3a57e8),
+        padding: const EdgeInsets.all(16),
+        textColor: const Color(0xffffffff),
+        height: 50,
+        minWidth: MediaQuery.of(context).size.width,
+        child: const Text(
+          "Sign up",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            fontStyle: FontStyle.normal,
+          ),
         ),
-        textAlign: TextAlign.start,
-        overflow: TextOverflow.clip,
       ),
     );
   }
