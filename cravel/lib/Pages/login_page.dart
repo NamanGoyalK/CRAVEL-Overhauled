@@ -3,6 +3,7 @@ import 'package:cravel/Pages/forgot_password.dart';
 // import 'package:cravel/Pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -55,10 +56,96 @@ class _LoginState extends State<Login> {
                 forgotButton(context),
                 loginButton(context),
                 createAccountButton(context),
+                const Padding(
+                  padding: EdgeInsets.all(4.0),
+                  child: Text(
+                    'or',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                      fontSize: 14,
+                      color: Color(0xff3a57e8),
+                    ),
+                  ),
+                ),
+                googleIcon()
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  MaterialButton googleIcon() {
+    return MaterialButton(
+      onPressed: () async {
+        try {
+          final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+          final GoogleSignInAuthentication? googleAuth =
+              await googleUser?.authentication;
+
+          final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth?.accessToken,
+            idToken: googleAuth?.idToken,
+          );
+
+          await FirebaseAuth.instance.signInWithCredential(credential);
+        } on Exception catch (e) {
+          // TODO
+          print('exception->$e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                "Could not sign in with google please use email instead",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 14,
+                  color: Color.fromARGB(255, 245, 245, 245),
+                ),
+              ),
+            ),
+          );
+        }
+      },
+      color: const Color(0x2d3a57e8),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      padding: const EdgeInsets.all(15),
+      textColor: const Color(0xff3a57e8),
+      height: 50,
+      minWidth: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Sign In with ',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontStyle: FontStyle.normal,
+              fontSize: 14,
+              color: Color(0xff3a57e8),
+            ),
+          ),
+          Image.asset(
+            "assets/images/google_icon.png",
+            height: 13,
+            width: 13,
+          ),
+          const Text(
+            'oogle',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontStyle: FontStyle.normal,
+              fontSize: 14,
+              color: Color(0xff3a57e8),
+            ),
+          )
+        ],
       ),
     );
   }

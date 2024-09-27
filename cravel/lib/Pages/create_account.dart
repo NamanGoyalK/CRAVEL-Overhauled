@@ -10,13 +10,6 @@ void main() {
     otpType: OTPType.numeric,
     emailTheme: EmailTheme.v4,
   );
-  EmailOTP.setSMTP(
-    host: '<Your-Host-Name>',
-    emailPort: EmailPort.port587,
-    secureType: SecureType.tls,
-    username: '<Your-Email-Address>',
-    password: '<Your-Password>',
-  );
 }
 
 class CreateAccount extends StatefulWidget {
@@ -27,8 +20,8 @@ class CreateAccount extends StatefulWidget {
 }
 
 class AuthClass {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  // Stream<User?> get authStateChanges => _auth.authStateChanges();
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<void> register(email, password) async {

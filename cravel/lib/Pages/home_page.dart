@@ -89,7 +89,7 @@ class _HomePageMainState extends State<HomePageMain> {
           actions: [
             IconButton(
               icon: const Icon(
-                CupertinoIcons.profile_circled,
+                Icons.settings_outlined,
                 color: Color.fromARGB(135, 0, 0, 0),
                 size: 30,
               ),
