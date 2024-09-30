@@ -51,8 +51,14 @@ class _LoginState extends State<Login> {
                 salutations(),
                 informativeText(),
                 logoPicture(),
-                userNameInput(),
-                passwordField(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                  child: userNameInput(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                  child: passwordField(),
+                ),
                 forgotButton(context),
                 loginButton(context),
                 createAccountButton(context),
@@ -77,8 +83,8 @@ class _LoginState extends State<Login> {
     );
   }
 
-  MaterialButton googleIcon() {
-    return MaterialButton(
+  ElevatedButton googleIcon() {
+    return ElevatedButton(
       onPressed: () async {
         try {
           final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -92,38 +98,51 @@ class _LoginState extends State<Login> {
           );
 
           await FirebaseAuth.instance.signInWithCredential(credential);
-        } on Exception catch (e) {
-          // TODO
-          print('exception->$e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                "Could not sign in with google please use email instead",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontStyle: FontStyle.normal,
-                  fontSize: 14,
-                  color: Color.fromARGB(255, 245, 245, 245),
+        } on Exception /*catch (e)*/ {
+          // print('exception->$e');
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Could not sign in with google please use email instead",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontStyle: FontStyle.normal,
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 245, 245, 245),
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          }
         }
       },
-      color: const Color(0x2d3a57e8),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: const Color.fromARGB(255, 245, 245, 245),
+        backgroundColor: const Color.fromARGB(44, 247, 247, 248),
+        side: const BorderSide(
+          width: 1,
+          color: Colors.black,
+        ),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        padding: const EdgeInsets.all(15),
+        // textColor: const Color(0xff3a57e8),
+        // height: 50,
+        // minWidth: MediaQuery.of(context).size.width,
       ),
-      padding: const EdgeInsets.all(15),
-      textColor: const Color(0xff3a57e8),
-      height: 50,
-      minWidth: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Image.asset(
+            "assets/images/google_icon.png",
+            height: 16,
+            width: 16,
+          ),
           const Text(
-            'Sign In with ',
+            '  Continue with ',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontStyle: FontStyle.normal,
@@ -131,13 +150,8 @@ class _LoginState extends State<Login> {
               color: Color(0xff3a57e8),
             ),
           ),
-          Image.asset(
-            "assets/images/google_icon.png",
-            height: 13,
-            width: 13,
-          ),
           const Text(
-            'oogle',
+            'Google',
             style: TextStyle(
               fontWeight: FontWeight.w700,
               fontStyle: FontStyle.normal,
@@ -184,7 +198,7 @@ class _LoginState extends State<Login> {
             fontWeight: FontWeight.w700,
             fontStyle: FontStyle.normal,
             fontSize: 14,
-            color: Color(0xff3a57e8),
+            color: Color.fromARGB(255, 51, 81, 231),
           ),
           textAlign: TextAlign.start,
           overflow: TextOverflow.clip,
@@ -379,7 +393,7 @@ class _LoginState extends State<Login> {
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal,
           fontSize: 14,
-          color: Color(0xff3a57e8),
+          color: Color.fromARGB(255, 53, 84, 240),
         ),
         textAlign: TextAlign.start,
         overflow: TextOverflow.clip,

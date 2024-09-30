@@ -66,6 +66,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 optButton(context),
                 passwordField(),
                 signUpButton(context),
+                signInInsteadButton(context),
               ],
             ),
           ),
@@ -147,7 +148,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Padding otpField() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: TextField(
         controller: otpController,
         keyboardType: TextInputType.emailAddress,
@@ -230,7 +231,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Padding logoPicture() {
     return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
       child: Align(
         alignment: Alignment.center,
         child:
@@ -248,7 +249,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Padding emailInput() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: TextField(
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
@@ -301,7 +302,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Padding passwordField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
       child: TextField(
         controller: passwordController,
         obscureText: passwordVisible,
@@ -433,7 +434,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Padding signUpButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 25, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
       child: MaterialButton(
         onPressed: () async {
           if (EmailOTP.getOTP() == otpController.text) {
@@ -531,6 +532,25 @@ class _CreateAccountState extends State<CreateAccount> {
             fontWeight: FontWeight.w700,
             fontStyle: FontStyle.normal,
           ),
+        ),
+      ),
+    );
+  }
+
+  signInInsteadButton(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: const Text(
+        "Sign in instead !",
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+          fontSize: 14,
+          color: Color(0xff3a57e8),
         ),
       ),
     );

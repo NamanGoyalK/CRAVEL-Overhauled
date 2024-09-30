@@ -1,8 +1,7 @@
 import 'package:cravel/Pages/SubPages/density_page.dart';
 import 'package:cravel/Pages/SubPages/front_page.dart';
 import 'package:cravel/Pages/SubPages/report_page.dart';
-import 'package:cravel/Pages/profile_page.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cravel/Pages/more_page.dart';
 import 'package:flutter/material.dart';
 
 int _selectedIndex = 0;
@@ -89,7 +88,7 @@ class _HomePageMainState extends State<HomePageMain> {
           actions: [
             IconButton(
               icon: const Icon(
-                Icons.settings_outlined,
+                Icons.menu,
                 color: Color.fromARGB(135, 0, 0, 0),
                 size: 30,
               ),
@@ -97,7 +96,7 @@ class _HomePageMainState extends State<HomePageMain> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ProfilePage(),
+                    builder: (context) => const MorePage(),
                   ),
                 );
               },

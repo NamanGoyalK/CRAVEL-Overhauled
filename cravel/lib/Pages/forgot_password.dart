@@ -33,7 +33,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 salutations(),
                 informativeText(),
                 logoPicture(),
-                emailInput(),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: emailInput(),
+                ),
                 sendButton(context),
               ],
             ),
