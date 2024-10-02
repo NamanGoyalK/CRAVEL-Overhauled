@@ -138,25 +138,25 @@ class _LoginState extends State<Login> {
         children: [
           Image.asset(
             "assets/images/google_icon.png",
-            height: 16,
-            width: 16,
+            height: 18,
+            width: 18,
           ),
           const Text(
             '  Continue with ',
             style: TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w500,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff3a57e8),
+              color: Color.fromARGB(255, 0, 0, 0),
             ),
           ),
           const Text(
             'Google',
             style: TextStyle(
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w500,
               fontStyle: FontStyle.normal,
               fontSize: 14,
-              color: Color(0xff3a57e8),
+              color: Color.fromARGB(255, 0, 0, 0),
             ),
           )
         ],

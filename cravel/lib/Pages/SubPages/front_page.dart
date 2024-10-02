@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:cravel/Pages/stuff/database.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -326,56 +327,3 @@ class RenderParallax extends RenderBox
             Offset(0.0, childRect.top));
   }
 }
-
-class Location {
-  const Location({
-    required this.name,
-    required this.place,
-    required this.imageUrl,
-  });
-
-  final String name;
-  final String place;
-  final String imageUrl;
-}
-
-const urlPrefix =
-    'https://docs.flutter.dev/cookbook/img-files/effects/parallax';
-const locations = [
-  Location(
-    name: 'Mount Rushmore',
-    place: 'U.S.A',
-    imageUrl:
-        'https://docs.flutter.dev/cookbook/img-files/effects/parallax/01-mount-rushmore.jpg',
-  ),
-  Location(
-    name: 'Gardens By The Bay',
-    place: 'Singapore',
-    imageUrl: '$urlPrefix/02-singapore.jpg',
-  ),
-  Location(
-    name: 'Machu Picchu',
-    place: 'Peru',
-    imageUrl: '$urlPrefix/03-machu-picchu.jpg',
-  ),
-  Location(
-    name: 'Vitznau',
-    place: 'Switzerland',
-    imageUrl: '$urlPrefix/04-vitznau.jpg',
-  ),
-  Location(
-    name: 'Bali',
-    place: 'Indonesia',
-    imageUrl: '$urlPrefix/05-bali.jpg',
-  ),
-  Location(
-    name: 'Mexico City',
-    place: 'Mexico',
-    imageUrl: '$urlPrefix/06-mexico-city.jpg',
-  ),
-  Location(
-    name: 'Cairo',
-    place: 'Egypt',
-    imageUrl: '$urlPrefix/07-cairo.jpg',
-  ),
-];
