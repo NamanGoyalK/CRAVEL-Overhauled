@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:cravel/widgets/salute_logo.dart';
+import 'package:cravel/widgets/text_fields.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_otp/email_otp.dart';
@@ -57,14 +59,28 @@ class _CreateAccountState extends State<CreateAccount> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                salutations(),
-                informativeText(),
-                logoPicture(),
-                emailInput(),
+                const Salutations(salute: 'Welcome!'),
+                const InformativeText(informative: 'Create Account'),
+                const LogoPicture(),
+                InputField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    labelText: 'Email',
+                    hintText: 'Enter Email'),
                 verifyEmailButton(),
-                otpField(),
+                InputField(
+                    controller: otpController,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(signed: false),
+                    labelText: 'OTP',
+                    hintText: 'Enter OTP'),
                 optButton(context),
-                passwordField(),
+                InputField(
+                  controller: passwordController,
+                  keyboardType: TextInputType.emailAddress,
+                  labelText: 'Password',
+                  hintText: 'Enter Password',
+                ),
                 signUpButton(context),
                 signInInsteadButton(context),
               ],

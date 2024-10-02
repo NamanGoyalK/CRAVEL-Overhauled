@@ -1,9 +1,10 @@
 import 'package:cravel/Pages/create_account.dart';
 import 'package:cravel/Pages/forgot_password.dart';
-// import 'package:cravel/Pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cravel/widgets/salute_logo.dart';
+import 'package:cravel/widgets/text_fields.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -48,36 +49,58 @@ class _LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                salutations(),
-                informativeText(),
-                logoPicture(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                  child: userNameInput(),
+                const Salutations(
+                  salute: 'Welcome Back!',
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-                  child: passwordField(),
+                const InformativeText(
+                  informative: 'Login to Continue',
+                ),
+                const LogoPicture(),
+                InputField(
+                  controller: email,
+                  keyboardType: TextInputType.emailAddress,
+                  labelText: 'Email',
+                  hintText: 'Enter Email',
+                ),
+                PasswordField(
+                  password: password,
+                  passwordVisible: passwordVisible,
+                  suffixIcon: IconButton(
+                    icon: Icon(passwordVisible
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined),
+                    onPressed: () {
+                      setState(
+                        () {
+                          passwordVisible = !passwordVisible;
+                        },
+                      );
+                    },
+                  ),
                 ),
                 forgotButton(context),
                 loginButton(context),
                 createAccountButton(context),
-                const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: Text(
-                    'or',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontStyle: FontStyle.normal,
-                      fontSize: 14,
-                      color: Color(0xff3a57e8),
-                    ),
-                  ),
-                ),
+                or(),
                 googleIcon()
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Padding or() {
+    return const Padding(
+      padding: EdgeInsets.all(4.0),
+      child: Text(
+        'or',
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontStyle: FontStyle.normal,
+          fontSize: 14,
+          color: Color(0xff3a57e8),
         ),
       ),
     );
@@ -207,167 +230,6 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Text salutations() {
-    return const Text(
-      "Welcome back!",
-      textAlign: TextAlign.start,
-      overflow: TextOverflow.clip,
-      style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.normal,
-        fontSize: 22,
-        color: Color(0xff000000),
-      ),
-    );
-  }
-
-  Padding informativeText() {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Text(
-        "Login to Continue",
-        textAlign: TextAlign.start,
-        overflow: TextOverflow.clip,
-        style: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 18,
-          color: Color(0xffa29b9b),
-        ),
-      ),
-    );
-  }
-
-  Padding logoPicture() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      child: Align(
-        alignment: Alignment.center,
-        child:
-
-            ///*If you have exported images you must have to copy those images in assets/images directory.
-            Image(
-          image: AssetImage("assets/images/onlyLogo.png"),
-          height: 150,
-          width: 150,
-          fit: BoxFit.contain,
-        ),
-      ),
-    );
-  }
-
-  TextField userNameInput() {
-    return TextField(
-      controller: email,
-      keyboardType: TextInputType.emailAddress,
-      obscureText: false,
-      textAlign: TextAlign.start,
-      maxLines: 1,
-      style: const TextStyle(
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.normal,
-        fontSize: 14,
-        color: Color(0xff000000),
-      ),
-      decoration: InputDecoration(
-        disabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        labelText: "Email",
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 16,
-          color: Color(0xff7c7878),
-        ),
-        hintText: "Enter Text",
-        hintStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 14,
-          color: Color(0xff000000),
-        ),
-        filled: true,
-        fillColor: const Color(0x00ffffff),
-        isDense: false,
-        contentPadding: const EdgeInsets.all(0),
-      ),
-    );
-  }
-
-  Padding passwordField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-      child: TextField(
-        controller: password,
-        obscureText: passwordVisible,
-        keyboardType: TextInputType.visiblePassword,
-        textAlign: TextAlign.start,
-        maxLines: 1,
-        style: const TextStyle(
-          fontWeight: FontWeight.w700,
-          fontStyle: FontStyle.normal,
-          fontSize: 14,
-          color: Color(0xff000000),
-        ),
-        decoration: InputDecoration(
-          disabledBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-          ),
-          labelText: "Password",
-          labelStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontStyle: FontStyle.normal,
-            fontSize: 16,
-            color: Color(0xff7c7878),
-          ),
-          hintText: "Enter Text",
-          hintStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontStyle: FontStyle.normal,
-            fontSize: 14,
-            color: Color(0xff000000),
-          ),
-          filled: true,
-          fillColor: const Color(0x00ffffff),
-          isDense: false,
-          contentPadding: const EdgeInsets.all(0),
-          suffixIcon: IconButton(
-            icon: Icon(passwordVisible
-                ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined),
-            onPressed: () {
-              setState(
-                () {
-                  passwordVisible = !passwordVisible;
-                },
-              );
-            },
-          ),
-          alignLabelWithHint: false,
-        ),
-      ),
-    );
-  }
-
   TextButton forgotPasswordButton() {
     return TextButton(
       onPressed: () {},
@@ -465,38 +327,6 @@ class _LoginState extends State<Login> {
             }
           }
         },
-
-        // onPressed: () {
-        //   if (email.text.isEmpty) {
-        //     ScaffoldMessenger.of(context).showSnackBar(
-        //       const SnackBar(
-        //         content: Text(
-        //           "Enter Email",
-        //           style: TextStyle(
-        //             fontWeight: FontWeight.w400,
-        //             fontStyle: FontStyle.normal,
-        //             fontSize: 14,
-        //             color: Color(0xffffffff),
-        //           ),
-        //         ),
-        //       ),
-        //     );
-        //   } else {
-        //     AuthClass().signIn(
-        //       email: email.text,
-        //       password: password.text,
-        //       context: context,
-        //       onSuccess: () {
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //             builder: (context) => const HomePageMain(),
-        //           ),
-        //         );
-        //       },
-        //     );
-        //   }
-        // },
         color: const Color(0xff3a57e8),
         elevation: 0,
         shape: RoundedRectangleBorder(

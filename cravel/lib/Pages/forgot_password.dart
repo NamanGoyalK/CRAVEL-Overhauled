@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cravel/widgets/salute_logo.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -30,102 +31,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                salutations(),
-                informativeText(),
-                logoPicture(),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: emailInput(),
-                ),
+                const Salutations(salute: 'Forgot Password?'),
+                const InformativeText(informative: "Don't Worry!"),
+                const LogoPicture(),
+                emailInput(),
                 sendButton(context),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Align forgotPassButton() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: TextButton(
-        onPressed: () {},
-        style: ButtonStyle(
-          overlayColor: WidgetStateProperty.resolveWith<Color?>(
-            (Set<WidgetState> states) {
-              if (states.contains(WidgetState.focused)) {
-                return const Color(0x1f000000);
-              }
-              if (states.contains(WidgetState.hovered)) {
-                return const Color(0x0a000000);
-              }
-              if (states.contains(WidgetState.pressed)) {
-                return const Color(0x0d000000);
-              }
-              return null;
-            },
-          ),
-        ),
-        child: const Text(
-          "Forgot Password?",
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontStyle: FontStyle.normal,
-            fontSize: 14,
-            color: Color(0xff3a57e8),
-          ),
-          textAlign: TextAlign.start,
-          overflow: TextOverflow.clip,
-        ),
-      ),
-    );
-  }
-
-  Text salutations() {
-    return const Text(
-      "Forgot Password",
-      textAlign: TextAlign.start,
-      overflow: TextOverflow.clip,
-      style: TextStyle(
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.normal,
-        fontSize: 22,
-        color: Color(0xff000000),
-      ),
-    );
-  }
-
-  Padding informativeText() {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
-      child: Text(
-        "Enter Your Email",
-        textAlign: TextAlign.start,
-        overflow: TextOverflow.clip,
-        style: TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 18,
-          color: Color(0xffa29b9b),
-        ),
-      ),
-    );
-  }
-
-  Padding logoPicture() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-      child: Align(
-        alignment: Alignment.center,
-        child:
-
-            ///*If you have exported images you must have to copy those images in assets/images directory.
-            Image(
-          image: AssetImage("assets/images/onlyLogo.png"),
-          height: 120,
-          width: 120,
-          fit: BoxFit.contain,
         ),
       ),
     );

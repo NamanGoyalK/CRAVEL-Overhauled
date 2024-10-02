@@ -99,14 +99,35 @@ class MorePage extends StatelessWidget {
       ),
       actions: [
         IconButton(
-          onPressed: () async {
-            await signOut();
-            if (FirebaseAuth.instance.currentUser == null) {
-              if (context.mounted) {
-                Navigator.of(context).pop();
-              }
-            }
-          },
+          onPressed: () => showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Logout?'),
+              content: const Text(
+                'Press ok to logout or cancel to remain signed in.',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Cancel'),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    await signOut();
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                    if (FirebaseAuth.instance.currentUser == null) {
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
+                    }
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          ),
           icon: const Icon(
             Icons.logout_outlined,
             color: Color.fromARGB(255, 0, 0, 0),
