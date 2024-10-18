@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:cravel/Pages/stuff/database.dart';
+import 'package:cravel/Pages/Database/database.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 

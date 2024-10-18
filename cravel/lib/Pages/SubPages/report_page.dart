@@ -1,46 +1,162 @@
 import 'package:flutter/material.dart';
+import 'package:cravel/widgets/text_fields.dart';
+import 'dart:async';
 
-Widget reportPage(BuildContext context) {
-  return Center(
-    child: ListView(
-      children: [
-        Center(
-          child: Column(
-            children: [
-              reportTitle(),
-              inputText(
-                'Email',
-                'Enter Your Email',
-                keyboardType: TextInputType.emailAddress,
-                noLines: 1,
-                justInCase: TextEditingController(),
-              ),
-              inputText(
-                'Location',
-                'Enter the Location',
-                keyboardType: TextInputType.multiline,
-                noLines: null,
-                justInCase: TextEditingController(),
-              ),
-              inputText(
-                'Description',
-                'Please provide with a description',
-                keyboardType: TextInputType.multiline,
-                noLines: null,
-                justInCase: TextEditingController(),
-              ),
-              inputText(
-                'Time',
-                'Enter Time',
-                keyboardType: const TextInputType.numberWithOptions(),
-                noLines: 1,
-                justInCase:
-                    TextEditingController(text: DateTime.now().toString()),
-              ),
-              submitButton(context),
-            ],
+final TextEditingController email = TextEditingController();
+final TextEditingController location = TextEditingController();
+final TextEditingController description = TextEditingController();
+String defaultTime = DateTime.now().toString();
+TextEditingController time =
+    TextEditingController(text: defaultTime.substring(0, 16));
+
+class ReportPage extends StatefulWidget {
+  const ReportPage({super.key});
+
+  @override
+  ReportPageState createState() => ReportPageState();
+}
+
+class ReportPageState extends State<ReportPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ListView(
+        children: [
+          Center(
+            child: Column(
+              children: [
+                reportTitle(),
+                inputForReport(),
+                const SubmitButton(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SubmitButton extends StatefulWidget {
+  const SubmitButton({
+    super.key,
+  });
+
+  @override
+  State<SubmitButton> createState() => _SubmitButtonState();
+}
+
+class _SubmitButtonState extends State<SubmitButton> {
+  bool _enabled = true;
+  bool isExpanded = false;
+  bool isSubmitted = false;
+  void _onTap() {
+    // Disable GestureDetector's 'onTap' property.
+    setState(() => _enabled = false);
+
+    // Enable it after 1s.
+    Timer(const Duration(seconds: 4), () => setState(() => _enabled = true));
+
+    setState(() {
+      isExpanded = !isExpanded;
+      if (isSubmitted) {
+        Timer(const Duration(seconds: 3), () {
+          setState(() {
+            isExpanded = false;
+            email.clear();
+            location.clear();
+            description.clear();
+            time.text = defaultTime.substring(0, 16);
+            FocusScope.of(context).unfocus();
+            isSubmitted = false;
+          });
+        });
+      } else {
+        Timer(const Duration(seconds: 3), () {
+          setState(() {
+            isExpanded = false;
+          });
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: GestureDetector(
+        onTap: _enabled ? _onTap : null,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOutCubic,
+          padding: const EdgeInsets.all(6.0),
+          margin: const EdgeInsets.all(6.0),
+          width: isExpanded ? 220 : 100,
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(isExpanded ? 30.0 : 6.0),
+            color: const Color.fromARGB(255, 255, 255, 255),
+            border: Border.all(
+              color: isExpanded
+                  ? (isSubmitted
+                      ? const Color.fromARGB(255, 3, 136, 69)
+                      : const Color.fromARGB(255, 155, 3, 3))
+                  : const Color.fromARGB(255, 51, 81, 231),
+            ),
+          ),
+          child: Text(
+            isExpanded
+                ? (isSubmitted ? 'Report Submitted !' : 'Report canceled !')
+                : 'SUBMIT',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontStyle: FontStyle.normal,
+              fontSize: 20,
+              color: isExpanded
+                  ? (isSubmitted
+                      ? const Color.fromARGB(255, 3, 136, 69)
+                      : const Color.fromARGB(255, 155, 3, 3))
+                  : const Color.fromARGB(255, 51, 81, 231),
+            ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
+      ),
+    );
+  }
+}
+
+Padding inputForReport() {
+  return Padding(
+    padding: const EdgeInsets.all(12.0),
+    child: Column(
+      children: [
+        InputField(
+            controller: email,
+            keyboardType: TextInputType.emailAddress,
+            labelText: 'Email',
+            hintText: 'Enter an Email'),
+        const SizedBox(height: 30),
+        InputField(
+            controller: location,
+            keyboardType: TextInputType.streetAddress,
+            labelText: 'Location',
+            hintText: 'Enter the Location'),
+        const SizedBox(height: 30),
+        InputField(
+            controller: description,
+            keyboardType: TextInputType.text,
+            labelText: 'Description',
+            hintText: 'Enter a brief description'),
+        const SizedBox(height: 30),
+        InputField(
+            controller: time,
+            keyboardType: TextInputType.emailAddress,
+            labelText: 'Time',
+            hintText: 'Enter the time'),
       ],
     ),
   );
@@ -62,108 +178,6 @@ Padding reportTitle() {
             offset: Offset(1.0, 1.0),
           ),
         ],
-      ),
-    ),
-  );
-}
-
-Padding inputText(dynamic field, dynamic label,
-    {required TextInputType keyboardType,
-    required int? noLines,
-    required justInCase}) {
-  return Padding(
-    padding: const EdgeInsets.all(24.0),
-    child: TextField(
-      controller: justInCase,
-      keyboardType: keyboardType,
-      obscureText: false,
-      textAlign: TextAlign.start,
-      maxLines: noLines,
-      style: const TextStyle(
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.normal,
-        fontSize: 14,
-        color: Color(0xff000000),
-      ),
-      decoration: InputDecoration(
-        disabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderRadius: BorderRadius.circular(4.0),
-          borderSide: const BorderSide(color: Color(0xff000000), width: 1),
-        ),
-        labelText: field,
-        labelStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 16,
-          color: Color(0xff7c7878),
-        ),
-        hintText: label,
-        hintStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontStyle: FontStyle.normal,
-          fontSize: 14,
-          color: Color(0xff000000),
-        ),
-        filled: true,
-        fillColor: const Color(0x00ffffff),
-        isDense: false,
-        contentPadding: const EdgeInsets.all(0),
-      ),
-    ),
-  );
-}
-
-Padding submitButton(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: TextButton(
-      onPressed: () => showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Report Submitted !'),
-          content: const Text('Your report has been submitted successfully.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      ),
-      style: ButtonStyle(
-        overlayColor: WidgetStateProperty.resolveWith<Color?>(
-          (Set<WidgetState> states) {
-            if (states.contains(WidgetState.focused)) {
-              return const Color(0x1f000000);
-            }
-            if (states.contains(WidgetState.hovered)) {
-              return const Color(0x0a000000);
-            }
-            if (states.contains(WidgetState.pressed)) {
-              return const Color(0x0d000000);
-            }
-            return null;
-          },
-        ),
-      ),
-      child: const Text(
-        "SUBMIT",
-        style: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontStyle: FontStyle.normal,
-          fontSize: 20,
-          color: Color(0xff3a57e8),
-        ),
-        textAlign: TextAlign.start,
-        overflow: TextOverflow.clip,
       ),
     ),
   );

@@ -10,8 +10,7 @@ class Location {
   final String imageUrl;
 }
 
-const urlPrefix =
-    'https://docs.flutter.dev/cookbook/img-files/effects/parallax';
+const urlPrefix = '';
 
 const locations = [
   Location(

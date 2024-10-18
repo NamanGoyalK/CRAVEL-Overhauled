@@ -33,7 +33,7 @@ class _HomePageMainState extends State<HomePageMain> {
         child: _selectedIndex == 0
             ? frontPage()
             : _selectedIndex == 1
-                ? reportPage(context)
+                ? const ReportPage()
                 : densityPage(),
       ),
       bottomNavigationBar: statusBar(),
