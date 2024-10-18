@@ -15,70 +15,95 @@ class MorePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
       appBar: titleBar(context),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ListTile(
-              title: Text(
-                'About Us:',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
+      body: const SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: Text(
+                  'About Us:',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                subtitle: Text(
+                    'We are a team of six members who are passionate about the culture of India.\n\nNaman Goyal: Founder and Developer\n\nOther Co-founders:\nPranav Mishra\nVansh Mishra\nAtulya Raj\nAntriksh Balayan\nKriti Garg'),
+              ),
+              ListTile(
+                title: Text(
+                  'Contact Us:',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                subtitle: Text(
+                  'Email: namangoyaldev@gmail.com',
                 ),
               ),
-              subtitle: Text(
-                  'We are a team of six members who are passionate about the culture of India.\n\nNaman Goyal: Founder and Developer\nPranav Mishra: Founder and Database handler\n\nOther Co-founders:\nVansh Mishra\nAtulya Raj\nAntriksh Balayan\nKriti Garg'),
-            ),
-            ListTile(
-              title: Text(
-                'Contact Us:',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
+              ListTile(
+                title: Text(
+                  'Privacy Policy:',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                subtitle: Text(
+                  'We will not share your personal information with anyone.',
                 ),
               ),
-              subtitle: Text(
-                'Email: namangoyaldev@gmail.com',
-              ),
-            ),
-            ListTile(
-              title: Text(
-                'Privacy Policy:',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
+              ListTile(
+                title: Text(
+                  'Terms and Conditions:',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
+                subtitle: Text(
+                  'Do not spam our emails or publish fake reports.',
                 ),
               ),
-              subtitle: Text(
-                'We will not share your personal information with anyone.',
-              ),
-            ),
-            ListTile(
-              title: Text(
-                'Terms and Conditions:',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  fontStyle: FontStyle.normal,
+              ListTile(
+                title: Text(
+                  'Version 1.0.0',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                  ),
                 ),
               ),
-              subtitle: Text(
-                'Do not spam our emails or publish fake reports.',
+              ListTile(
+                title: Text(
+                  'Developed by Naman Goyal with ❤️',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.normal,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+      bottomNavigationBar: bottomBar(context),
     );
   }
 
@@ -134,6 +159,18 @@ class MorePage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  bottomBar(BuildContext context) {
+    return const BottomAppBar(
+      color: Color(0xffffffff),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ElevatedButton(onPressed: null, child: Text('Remove Adds')),
+        ],
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cravel/widgets/text_fields.dart';
 import 'dart:async';
@@ -49,13 +50,66 @@ class SubmitButton extends StatefulWidget {
 class _SubmitButtonState extends State<SubmitButton> {
   bool _enabled = true;
   bool isExpanded = false;
-  bool isSubmitted = false;
+  bool isSubmitted = true;
   void _onTap() {
     // Disable GestureDetector's 'onTap' property.
     setState(() => _enabled = false);
 
-    // Enable it after 1s.
-    Timer(const Duration(seconds: 4), () => setState(() => _enabled = true));
+    if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+        .hasMatch(email.text)) {
+      isSubmitted = false;
+      Timer(const Duration(seconds: 4), () => setState(() => _enabled = true));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid email'),
+        ),
+      );
+    } else if (location.text.isEmpty) {
+      isSubmitted = false;
+      Timer(const Duration(seconds: 4), () => setState(() => _enabled = true));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid location'),
+        ),
+      );
+    } else if (description.text.isEmpty) {
+      isSubmitted = false;
+      Timer(const Duration(seconds: 4), () => setState(() => _enabled = true));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid description'),
+        ),
+      );
+    } else if (time.text.isEmpty) {
+      isSubmitted = false;
+      Timer(const Duration(seconds: 4), () => setState(() => _enabled = true));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid time'),
+        ),
+      );
+    } else {
+      isSubmitted = true;
+      Timer(const Duration(hours: 1), () => setState(() => _enabled = true));
+
+      if (kDebugMode) {
+        print(email.text);
+        print(location.text);
+        print(description.text);
+        print(time.text);
+      }
+      //todo: Send report
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Thank you for your report'),
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You can submit another report after an hour'),
+        ),
+      );
+    }
 
     setState(() {
       isExpanded = !isExpanded;

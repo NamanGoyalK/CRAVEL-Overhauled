@@ -56,28 +56,8 @@ class _LoginState extends State<Login> {
                   informative: 'Login to Continue',
                 ),
                 const LogoPicture(),
-                InputField(
-                  controller: email,
-                  keyboardType: TextInputType.emailAddress,
-                  labelText: 'Email',
-                  hintText: 'Enter Email',
-                ),
-                PasswordField(
-                  password: password,
-                  passwordVisible: passwordVisible,
-                  suffixIcon: IconButton(
-                    icon: Icon(passwordVisible
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined),
-                    onPressed: () {
-                      setState(
-                        () {
-                          passwordVisible = !passwordVisible;
-                        },
-                      );
-                    },
-                  ),
-                ),
+                emailInput(),
+                passwordInput(),
                 forgotButton(context),
                 loginButton(context),
                 createAccountButton(context),
@@ -88,6 +68,34 @@ class _LoginState extends State<Login> {
           ),
         ),
       ),
+    );
+  }
+
+  PasswordField passwordInput() {
+    return PasswordField(
+      password: password,
+      passwordVisible: passwordVisible,
+      suffixIcon: IconButton(
+        icon: Icon(passwordVisible
+            ? Icons.visibility_outlined
+            : Icons.visibility_off_outlined),
+        onPressed: () {
+          setState(
+            () {
+              passwordVisible = !passwordVisible;
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  InputField emailInput() {
+    return InputField(
+      controller: email,
+      keyboardType: TextInputType.emailAddress,
+      labelText: 'Email',
+      hintText: 'Enter Email',
     );
   }
 
