@@ -41,6 +41,7 @@ dependencies:
   firebase_auth: ^5.3.0
   email_otp: ^3.0.2
   google_sign_in: ^6.2.1
+  in_app_purchase: ^3.2.0
 
 dev_dependencies:
   flutter_test:

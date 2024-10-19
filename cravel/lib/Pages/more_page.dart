@@ -168,7 +168,9 @@ class MorePage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ElevatedButton(onPressed: null, child: Text('Remove Adds')),
+          ElevatedButton(
+              onPressed: null,
+              child: Text('Unlock ad-free experience for only ₹129!')),
         ],
       ),
     );

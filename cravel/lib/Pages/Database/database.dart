@@ -16,22 +16,25 @@ const locations = [
   Location(
     name: 'Lahaul & Pangi Valley',
     place: 'Himachal Pradesh, India',
-    imageUrl: '$urlPrefix/lahaul-pangi-valley.jpg',
+    imageUrl:
+        'https://discoverwithdheeraj.com/wp-content/uploads/2020/05/Manali_Leh_Road_193.jpg',
   ),
   Location(
     name: 'Great Himalayan National Park (GHNP)',
     place: 'Himachal Pradesh, India',
-    imageUrl: '$urlPrefix/great-himalayan-national-park.jpg',
+    imageUrl:
+        'https://www.tirthanvalleystay.com/wp-content/uploads/2023/02/Featured-image.jpg',
   ),
   Location(
     name: 'Munsiyari, Milam, Dharchula',
     place: 'Uttarakhand, India',
-    imageUrl: '$urlPrefix/munsiyari-milam-dharchula.jpg',
+    imageUrl:
+        'https://www.youngisthan.in/wp-content/uploads/2017/02/milam-inn-munsiyari.jpg',
   ),
   Location(
     name: 'Jaunsar Bawar Region',
     place: 'Uttarakhand, India',
-    imageUrl: '$urlPrefix/jaunsar-bawar-region.jpg',
+    imageUrl: 'https://new-img.patrika.com/upload/2021/09/21/trv.png',
   ),
   Location(
     name: 'Niti, Malari & More',
