@@ -90,7 +90,7 @@ class MorePage extends StatelessWidget {
               ),
               ListTile(
                 title: Text(
-                  'Developed by Naman Goyal with ❤️',
+                  'Developed by Naman Goyal with Love !\nSpecial Thanks to Partha Pratim Gogoi !',
                   style: TextStyle(
                     color: Color.fromARGB(255, 0, 0, 0),
                     fontSize: 16,
@@ -163,14 +163,30 @@ class MorePage extends StatelessWidget {
   }
 
   bottomBar(BuildContext context) {
-    return const BottomAppBar(
-      color: Color(0xffffffff),
+    return BottomAppBar(
+      color: const Color(0xffffffff),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ElevatedButton(
-              onPressed: null,
-              child: Text('Unlock ad-free experience for only ₹129!')),
+          MaterialButton(
+            onPressed: () {},
+            color: const Color.fromARGB(149, 0, 0, 0),
+            elevation: 0,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(18.0),
+              ),
+            ),
+            child: const Text(
+              'Unlock ad-free experience for only ₹129!',
+              style: TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -10,31 +10,29 @@ class Location {
   final String imageUrl;
 }
 
-const urlPrefix = '';
+const urlPrefix =
+    'https://raw.githubusercontent.com/NamanGoyalK/Cravel-Pics-Database/refs/heads/main';
 
 const locations = [
   Location(
     name: 'Lahaul & Pangi Valley',
     place: 'Himachal Pradesh, India',
-    imageUrl:
-        'https://discoverwithdheeraj.com/wp-content/uploads/2020/05/Manali_Leh_Road_193.jpg',
+    imageUrl: '$urlPrefix/44vmru0s.png',
   ),
   Location(
     name: 'Great Himalayan National Park (GHNP)',
     place: 'Himachal Pradesh, India',
-    imageUrl:
-        'https://www.tirthanvalleystay.com/wp-content/uploads/2023/02/Featured-image.jpg',
+    imageUrl: '$urlPrefix/dfmtpxwd.png',
   ),
   Location(
     name: 'Munsiyari, Milam, Dharchula',
     place: 'Uttarakhand, India',
-    imageUrl:
-        'https://www.youngisthan.in/wp-content/uploads/2017/02/milam-inn-munsiyari.jpg',
+    imageUrl: '$urlPrefix/2xnharvj.png',
   ),
   Location(
     name: 'Jaunsar Bawar Region',
     place: 'Uttarakhand, India',
-    imageUrl: 'https://new-img.patrika.com/upload/2021/09/21/trv.png',
+    imageUrl: '$urlPrefix/trv.jpg',
   ),
   Location(
     name: 'Niti, Malari & More',

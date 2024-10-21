@@ -1,21 +1,48 @@
 import 'package:flutter/material.dart';
 
-class LogoPicture extends StatelessWidget {
-  const LogoPicture({
-    super.key,
-  });
+class LogoPicture extends StatefulWidget {
+  const LogoPicture({super.key});
+
+  @override
+  State<LogoPicture> createState() => _LogoPictureState();
+}
+
+class _LogoPictureState extends State<LogoPicture>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> logoFadeAnimation;
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    logoFadeAnimation = Tween<double>(begin: 0, end: 1).animate(controller);
+    controller.forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       child: Align(
         alignment: Alignment.center,
-        child: Image(
-          image: AssetImage("assets/images/onlyLogo.png"),
-          height: 150,
-          width: 150,
-          fit: BoxFit.contain,
+        child: FadeTransition(
+          opacity: logoFadeAnimation,
+          child: const Image(
+            image: AssetImage("assets/images/onlyLogo.png"),
+            height: 150,
+            width: 150,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );
@@ -24,11 +51,7 @@ class LogoPicture extends StatelessWidget {
 
 class InformativeText extends StatelessWidget {
   final String informative;
-
-  const InformativeText({
-    super.key,
-    required this.informative,
-  });
+  const InformativeText({super.key, required this.informative});
 
   @override
   Widget build(BuildContext context) {

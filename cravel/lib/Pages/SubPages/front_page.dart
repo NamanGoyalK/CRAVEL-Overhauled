@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:cravel/Pages/Database/database.dart';
+import 'package:cravel/Pages/Database/database.dart'; // Assuming this file contains your 'locations' data
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -101,8 +101,10 @@ class LocationListItem extends StatelessWidget {
         backgroundImageKey: _backgroundImageKey,
       ),
       children: [
-        Image.network(
-          imageUrl,
+        FadeInImage.assetNetwork(
+          placeholder:
+              'assets/images/output.jpg', // Path to your placeholder image
+          image: imageUrl,
           key: _backgroundImageKey,
           fit: BoxFit.cover,
         ),
