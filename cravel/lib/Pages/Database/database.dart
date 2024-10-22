@@ -20,7 +20,7 @@ const locations = [
     imageUrl: '$urlPrefix/44vmru0s.png',
   ),
   Location(
-    name: 'Great Himalayan National Park (GHNP)',
+    name: 'Great Himalayan National Park',
     place: 'Himachal Pradesh, India',
     imageUrl: '$urlPrefix/dfmtpxwd.png',
   ),
@@ -40,7 +40,7 @@ const locations = [
     imageUrl: '$urlPrefix/niti-malari.jpg',
   ),
   Location(
-    name: 'Drass, Kargil, Aryan Valley & Suru Valley',
+    name: 'Drass & Suru Valley',
     place: 'Ladakh, India',
     imageUrl: '$urlPrefix/drass-kargil-aryan-valley-suru-valley.jpg',
   ),

@@ -8,6 +8,29 @@ Widget frontPage() {
   return const ExampleParallax();
 }
 
+class ExampleParallax extends StatelessWidget {
+  const ExampleParallax({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          searchBar(),
+          for (final location in locations)
+            LocationListItem(
+              imageUrl: location.imageUrl,
+              name: location.name,
+              city: location.place,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 Padding searchBar() {
   return Padding(
     padding:
@@ -35,29 +58,6 @@ Padding searchBar() {
       ),
     ),
   );
-}
-
-class ExampleParallax extends StatelessWidget {
-  const ExampleParallax({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          searchBar(),
-          for (final location in locations)
-            LocationListItem(
-              imageUrl: location.imageUrl,
-              name: location.name,
-              city: location.place,
-            ),
-        ],
-      ),
-    );
-  }
 }
 
 class LocationListItem extends StatelessWidget {

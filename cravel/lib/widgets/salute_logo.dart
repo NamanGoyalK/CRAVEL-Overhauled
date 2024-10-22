@@ -9,7 +9,7 @@ class LogoPicture extends StatefulWidget {
 
 class _LogoPictureState extends State<LogoPicture>
     with SingleTickerProviderStateMixin {
-  late Animation<double> logoFadeAnimation;
+  late Animation<double> logoAnimation;
   late AnimationController controller;
 
   @override
@@ -19,7 +19,7 @@ class _LogoPictureState extends State<LogoPicture>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
-    logoFadeAnimation = Tween<double>(begin: 0, end: 1).animate(controller);
+    logoAnimation = Tween<double>(begin: 0, end: 1).animate(controller);
     controller.forward();
   }
 
@@ -36,12 +36,14 @@ class _LogoPictureState extends State<LogoPicture>
       child: Align(
         alignment: Alignment.center,
         child: FadeTransition(
-          opacity: logoFadeAnimation,
-          child: const Image(
-            image: AssetImage("assets/images/onlyLogo.png"),
-            height: 150,
-            width: 150,
-            fit: BoxFit.contain,
+          opacity: logoAnimation,
+          child: const Center(
+            child: Image(
+              image: AssetImage("assets/images/final_branding.png"),
+              height: 120,
+              width: 200,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),
