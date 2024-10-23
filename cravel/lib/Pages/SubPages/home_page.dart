@@ -36,6 +36,9 @@ class HomePageMainState extends State<HomePage> {
             actions: [
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
                 child: isDropdownVisible
                     ? Container(
                         key: const ValueKey('dropdown'),
@@ -217,6 +220,12 @@ class LocationListItem extends StatelessWidget {
           image: imageUrl,
           key: backgroundImageKey0,
           fit: BoxFit.cover,
+          imageErrorBuilder: (context, error, stackTrace) {
+            return Image.asset(
+              'assets/images/output.jpg',
+              fit: BoxFit.cover,
+            );
+          },
         ),
       ],
     );
