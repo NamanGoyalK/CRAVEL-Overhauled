@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:cravel/Pages/Database/database.dart'; // Assuming this file contains your 'locations' data
+import 'package:cravel/Pages/Database/database.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -12,95 +12,160 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageMainState extends State<HomePage> {
-  String selectedState = 'All'; // Default value for dropdown
+  String selectedState = 'All';
+  bool isDropdownVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Locations'),
-        actions: [
-          DropdownButton<String>(
-            value: selectedState,
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedState = newValue!;
-              });
-            },
-            items: <String>[
-              'All',
-              'Himachal Pradesh',
-              'Uttarakhand',
-              'Ladakh',
-              'Jammu & Kashmir',
-              'Uttar Pradesh',
-              'Rajasthan',
-              'Gujarat',
-              'Maharashtra',
-              'Madhya Pradesh',
-              'Chhattisgarh',
-              'Odisha',
-              'Arunachal Pradesh',
-              'Nagaland',
-              'Assam',
-              'Tripura',
-              'West Bengal',
-              'Tamil Nadu',
-              'Andhra Pradesh',
-              'Kerala',
-              'Punjab',
-              'Haryana',
-              'Bihar',
-              'Sikkim',
-              'Manipur',
-              'Mizoram',
-              'Meghalaya',
-              'Telangana',
-              'Karnataka'
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-      body: frontPage(),
-    );
-  }
-
-  Widget frontPage() {
-    List<Location> filteredLocations = selectedState == 'All'
-        ? locations
-        : locations
-            .where((location) => location.place.contains(selectedState))
-            .toList();
-
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  Icon(Icons.home_outlined),
-                  Text(
-                    ' Our Suggestions !',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ],
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            floating: true,
+            pinned: false,
+            snap: true,
+            elevation: 0,
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+            title: const Text('Our Suggestions !',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                )),
+            actions: [
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: isDropdownVisible
+                    ? Container(
+                        key: const ValueKey('dropdown'),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.grey, width: 1),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            icon: const Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Color(0xFF333333),
+                            ),
+                            iconSize: 24,
+                            style: const TextStyle(
+                              color: Color(0xFF333333),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                            dropdownColor: const Color(0xFFFFFFFF),
+                            value: selectedState,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedState = newValue!;
+                                isDropdownVisible = false;
+                              });
+                            },
+                            items: [
+                              'All',
+                              'Himachal Pradesh',
+                              'Uttarakhand',
+                              'Ladakh',
+                              'Jammu & Kashmir',
+                              'Uttar Pradesh',
+                              'Rajasthan',
+                              'Gujarat',
+                              'Maharashtra',
+                              'Madhya Pradesh',
+                              'Chhattisgarh',
+                              'Odisha',
+                              'Arunachal Pradesh',
+                              'Nagaland',
+                              'Assam',
+                              'Tripura',
+                              'West Bengal',
+                              'Tamil Nadu',
+                              'Andhra Pradesh',
+                              'Kerala',
+                              'Punjab',
+                              'Haryana',
+                              'Bihar',
+                              'Sikkim',
+                              'Manipur',
+                              'Mizoram',
+                              'Meghalaya',
+                              'Telangana',
+                              'Karnataka'
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 4, vertical: 2),
+                                  child: Text(
+                                    value,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      )
+                    : IconButton(
+                        key: const ValueKey('filter_icon'),
+                        icon: const Icon(Icons.filter_alt_outlined,
+                            color: Color(0xFF333333)),
+                        onPressed: () {
+                          setState(() {
+                            isDropdownVisible = true;
+                          });
+                        },
+                      ),
               ),
+              const SizedBox(width: 12),
+            ],
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                List<Location> filteredLocations = selectedState == 'All'
+                    ? locations
+                    : locations
+                        .where((location) =>
+                            location.place.contains(selectedState))
+                        .toList();
+                if (index < filteredLocations.length) {
+                  final location = filteredLocations[index];
+                  return LocationListItem(
+                    imageUrl: location.imageUrl,
+                    name: location.name,
+                    city: location.place,
+                  );
+                } else {
+                  return null;
+                }
+              },
+              childCount: selectedState == 'All'
+                  ? locations.length
+                  : locations
+                      .where(
+                          (location) => location.place.contains(selectedState))
+                      .length,
             ),
           ),
-          for (final location in filteredLocations)
-            LocationListItem(
-              imageUrl: location.imageUrl,
-              name: location.name,
-              city: location.place,
-            ),
         ],
       ),
     );
@@ -118,7 +183,7 @@ class LocationListItem extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String city;
-  final GlobalKey _backgroundImageKey = GlobalKey();
+  final GlobalKey backgroundImageKey0 = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -130,9 +195,9 @@ class LocationListItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           child: Stack(
             children: [
-              _buildParallaxBackground(context),
-              _buildGradient(),
-              _buildTitleAndSubtitle(),
+              buildParallaxBackground(context),
+              buildGradient(),
+              buildTitleAndSubtitle(),
             ],
           ),
         ),
@@ -140,25 +205,25 @@ class LocationListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildParallaxBackground(BuildContext context) {
+  Widget buildParallaxBackground(BuildContext context) {
     return Flow(
       delegate: ParallaxFlowDelegate(
         scrollable: Scrollable.of(context),
         listItemContext: context,
-        backgroundImageKey: _backgroundImageKey,
+        backgroundImageKey: backgroundImageKey0,
       ),
       children: [
         FadeInImage.assetNetwork(
           placeholder: 'assets/images/output.jpg',
           image: imageUrl,
-          key: _backgroundImageKey,
+          key: backgroundImageKey0,
           fit: BoxFit.cover,
         ),
       ],
     );
   }
 
-  Widget _buildGradient() {
+  Widget buildGradient() {
     return Positioned.fill(
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -173,7 +238,7 @@ class LocationListItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTitleAndSubtitle() {
+  Widget buildTitleAndSubtitle() {
     return Positioned(
       left: 20,
       bottom: 20,
@@ -276,8 +341,7 @@ class Parallax extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, covariant RenderParallax renderObject) {
+  void updateRenderObject(BuildContext context, RenderParallax renderObject) {
     renderObject.scrollable = Scrollable.of(context);
   }
 }
@@ -288,38 +352,38 @@ class RenderParallax extends RenderBox
     with RenderObjectWithChildMixin<RenderBox>, RenderProxyBoxMixin {
   RenderParallax({
     required ScrollableState scrollable,
-  }) : _scrollable = scrollable;
+  }) : scrollable0 = scrollable;
 
-  ScrollableState _scrollable;
+  ScrollableState scrollable0;
 
-  ScrollableState get scrollable => _scrollable;
+  ScrollableState get scrollable => scrollable0;
 
   set scrollable(ScrollableState value) {
-    if (value != _scrollable) {
+    if (value != scrollable0) {
       if (attached) {
-        _scrollable.position.removeListener(markNeedsLayout);
+        scrollable0.position.removeListener(markNeedsLayout);
       }
-      _scrollable = value;
+      scrollable0 = value;
       if (attached) {
-        _scrollable.position.addListener(markNeedsLayout);
+        scrollable0.position.addListener(markNeedsLayout);
       }
     }
   }
 
   @override
-  void attach(covariant PipelineOwner owner) {
+  void attach(PipelineOwner owner) {
     super.attach(owner);
-    _scrollable.position.addListener(markNeedsLayout);
+    scrollable0.position.addListener(markNeedsLayout);
   }
 
   @override
   void detach() {
-    _scrollable.position.removeListener(markNeedsLayout);
+    scrollable0.position.removeListener(markNeedsLayout);
     super.detach();
   }
 
   @override
-  void setupParentData(covariant RenderObject child) {
+  void setupParentData(RenderObject child) {
     if (child.parentData is! ParallaxParentData) {
       child.parentData = ParallaxParentData();
     }

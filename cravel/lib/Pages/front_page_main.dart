@@ -1,5 +1,5 @@
 import 'package:cravel/Pages/SubPages/density_page.dart';
-import 'package:cravel/Pages/SubPages/front_page.dart';
+import 'package:cravel/Pages/SubPages/home_page.dart';
 import 'package:cravel/Pages/SubPages/report_page.dart';
 import 'package:cravel/Pages/SubPages/search_page.dart';
 import 'package:cravel/Pages/more_page.dart';
@@ -75,7 +75,9 @@ class _HomePageMainState extends State<HomePageMain> {
         child: AppBar(
           backgroundColor: const Color(0xffffffff),
           elevation: 0,
+
           automaticallyImplyLeading: false,
+
           // centerTitle: true,
           title: const Text(
             'Cravel',
@@ -87,15 +89,6 @@ class _HomePageMainState extends State<HomePageMain> {
             ),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                showSearch(
-                    context: context,
-                    // delegate to customize the search bar
-                    delegate: CustomSearchDelegate());
-              },
-              icon: const Icon(Icons.search),
-            ),
             IconButton(
               icon: const Icon(
                 Icons.menu,

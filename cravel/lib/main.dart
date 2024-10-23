@@ -1,4 +1,4 @@
-import 'package:cravel/Pages/home_page.dart';
+import 'package:cravel/Pages/front_page_main.dart';
 import 'package:cravel/Pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
