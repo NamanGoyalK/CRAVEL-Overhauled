@@ -4,22 +4,98 @@ import 'package:cravel/Pages/Database/database.dart'; // Assuming this file cont
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
-Widget frontPage() {
-  return const ExampleParallax();
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  HomePageMainState createState() => HomePageMainState();
 }
 
-class ExampleParallax extends StatelessWidget {
-  const ExampleParallax({
-    super.key,
-  });
+class HomePageMainState extends State<HomePage> {
+  String selectedState = 'All'; // Default value for dropdown
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Locations'),
+        actions: [
+          DropdownButton<String>(
+            value: selectedState,
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedState = newValue!;
+              });
+            },
+            items: <String>[
+              'All',
+              'Himachal Pradesh',
+              'Uttarakhand',
+              'Ladakh',
+              'Jammu & Kashmir',
+              'Uttar Pradesh',
+              'Rajasthan',
+              'Gujarat',
+              'Maharashtra',
+              'Madhya Pradesh',
+              'Chhattisgarh',
+              'Odisha',
+              'Arunachal Pradesh',
+              'Nagaland',
+              'Assam',
+              'Tripura',
+              'West Bengal',
+              'Tamil Nadu',
+              'Andhra Pradesh',
+              'Kerala',
+              'Punjab',
+              'Haryana',
+              'Bihar',
+              'Sikkim',
+              'Manipur',
+              'Mizoram',
+              'Meghalaya',
+              'Telangana',
+              'Karnataka'
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+      body: frontPage(),
+    );
+  }
+
+  Widget frontPage() {
+    List<Location> filteredLocations = selectedState == 'All'
+        ? locations
+        : locations
+            .where((location) => location.place.contains(selectedState))
+            .toList();
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          searchBar(),
-          for (final location in locations)
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  Icon(Icons.home_outlined),
+                  Text(
+                    ' Our Suggestions !',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          for (final location in filteredLocations)
             LocationListItem(
               imageUrl: location.imageUrl,
               name: location.name,
@@ -29,35 +105,6 @@ class ExampleParallax extends StatelessWidget {
       ),
     );
   }
-}
-
-Padding searchBar() {
-  return Padding(
-    padding:
-        const EdgeInsets.only(left: 13.0, right: 13.0, top: 6.0, bottom: 6.0),
-    child: TextField(
-      controller: TextEditingController(),
-      keyboardType: TextInputType.emailAddress,
-      obscureText: false,
-      textAlign: TextAlign.start,
-      maxLines: 1,
-      style: const TextStyle(
-        fontWeight: FontWeight.w700,
-        fontStyle: FontStyle.normal,
-        fontSize: 16,
-        color: Color(0xff000000),
-      ),
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        hintText: "Search",
-        prefixIcon: const Icon(
-          Icons.search,
-        ),
-      ),
-    ),
-  );
 }
 
 class LocationListItem extends StatelessWidget {
@@ -102,8 +149,7 @@ class LocationListItem extends StatelessWidget {
       ),
       children: [
         FadeInImage.assetNetwork(
-          placeholder:
-              'assets/images/output.jpg', // Path to your placeholder image
+          placeholder: 'assets/images/output.jpg',
           image: imageUrl,
           key: _backgroundImageKey,
           fit: BoxFit.cover,

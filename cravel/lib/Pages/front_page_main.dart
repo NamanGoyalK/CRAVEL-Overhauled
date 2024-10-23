@@ -1,6 +1,7 @@
 import 'package:cravel/Pages/SubPages/density_page.dart';
 import 'package:cravel/Pages/SubPages/front_page.dart';
 import 'package:cravel/Pages/SubPages/report_page.dart';
+import 'package:cravel/Pages/SubPages/search_page.dart';
 import 'package:cravel/Pages/more_page.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class _HomePageMainState extends State<HomePageMain> {
       appBar: titleBar(context),
       body: Center(
         child: _selectedIndex == 0
-            ? frontPage()
+            ? const HomePage()
             : _selectedIndex == 1
                 ? const ReportPage()
                 : densityPage(),
@@ -86,6 +87,15 @@ class _HomePageMainState extends State<HomePageMain> {
             ),
           ),
           actions: [
+            IconButton(
+              onPressed: () {
+                showSearch(
+                    context: context,
+                    // delegate to customize the search bar
+                    delegate: CustomSearchDelegate());
+              },
+              icon: const Icon(Icons.search),
+            ),
             IconButton(
               icon: const Icon(
                 Icons.menu,
