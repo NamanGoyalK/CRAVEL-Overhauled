@@ -4,45 +4,66 @@ import 'package:cravel/Pages/SubPages/report_page.dart';
 import 'package:cravel/Pages/more_page.dart';
 import 'package:flutter/material.dart';
 
-int _selectedIndex = 0;
-
-class HomePageMain extends StatefulWidget {
-  const HomePageMain({super.key});
+class FrontPageMain extends StatefulWidget {
+  const FrontPageMain({super.key});
 
   @override
-  State<HomePageMain> createState() => _HomePageMainState();
+  State<FrontPageMain> createState() => _FrontPageMainState();
 }
 
-class _HomePageMainState extends State<HomePageMain> {
-  set selectedIndex(int selectedIndex) {}
+class _FrontPageMainState extends State<FrontPageMain> {
+  int _selectedIndex = 0;
+  final PageController _pageController = PageController();
+
+  // Constant colors for reuse
+  static const Color _backgroundColor = Colors.white;
+  static const Color _appBarColor = Colors.white;
+  static const Color _selectedIconColor = Color.fromARGB(255, 58, 34, 213);
 
   void _onItemTapped(int index) {
-    setState(
-      () {
-        _selectedIndex = index;
-      },
-    );
+    setState(() {
+      _selectedIndex = index;
+    });
+    _pageController.jumpToPage(index); // Jump to the selected page
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose(); // Dispose of the controller when done
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffffffff),
-      appBar: titleBar(context),
-      body: Center(
-        child: _selectedIndex == 0
-            ? const HomePage()
-            : _selectedIndex == 1
-                ? const ReportPage()
-                : densityPage(),
-      ),
-      bottomNavigationBar: statusBar(),
+      backgroundColor: _backgroundColor,
+      appBar: _buildTitleBar(context),
+      body: _buildBody(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
-  BottomNavigationBar statusBar() {
+  // Build the body with PageView
+  Widget _buildBody() {
+    return PageView(
+      controller: _pageController,
+      onPageChanged: (index) {
+        setState(() {
+          _selectedIndex = index; // Update selected index when swiping
+        });
+      },
+      children: const <Widget>[
+        HomePage(),
+        ReportPage(),
+        DensityPage(),
+      ],
+    );
+  }
+
+  // Build the bottom navigation bar
+  BottomNavigationBar _buildBottomNavigationBar() {
     return BottomNavigationBar(
-      backgroundColor: Colors.white,
+      backgroundColor: _backgroundColor,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
@@ -60,51 +81,45 @@ class _HomePageMainState extends State<HomePageMain> {
       onTap: _onItemTapped,
       currentIndex: _selectedIndex,
       selectedIconTheme: const IconThemeData(
-        color: Color.fromARGB(255, 58, 34, 213),
+        color: _selectedIconColor,
         size: 30,
       ),
     );
   }
 
-  PreferredSize titleBar(BuildContext context) {
+  // Build the title bar
+  PreferredSize _buildTitleBar(BuildContext context) {
     return PreferredSize(
       preferredSize: const Size.fromHeight(50),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
-        child: AppBar(
-          backgroundColor: const Color(0xffffffff),
-          elevation: 0,
-
-          automaticallyImplyLeading: false,
-
-          // centerTitle: true,
-          title: const Text(
-            'Cravel',
-            style: TextStyle(
-              color: Color.fromARGB(255, 0, 0, 0),
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-              fontStyle: FontStyle.normal,
-            ),
+      child: AppBar(
+        backgroundColor: _appBarColor,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: const Text(
+          'Cravel',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 30,
+            fontWeight: FontWeight.w700,
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Color.fromARGB(135, 0, 0, 0),
-                size: 30,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MorePage(),
-                  ),
-                );
-              },
-            ),
-          ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.menu,
+              color: Color.fromARGB(135, 0, 0, 0),
+              size: 30,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MorePage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

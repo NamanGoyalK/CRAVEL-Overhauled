@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         stream: AuthClass().authStateChanges,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const HomePageMain();
+            return const FrontPageMain();
           } else {
             return const Login();
           }
