@@ -7,6 +7,7 @@ class InputField extends StatelessWidget {
     required this.keyboardType,
     required this.labelText,
     required this.hintText,
+    required Icon prefixIcon,
   });
 
   final TextEditingController controller;

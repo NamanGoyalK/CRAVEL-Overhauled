@@ -320,6 +320,36 @@ const locations = [
     imageUrl: '$urlPrefix/ravangla.jpg',
   ),
   Location(
+    name: 'Ajodhya Hills',
+    place: 'Jharkhand, India',
+    imageUrl: '$urlPrefix/ajodhya_hills.jpg',
+  ),
+  Location(
+    name: 'Satpahar Hills',
+    place: 'Jharkhand, India',
+    imageUrl: '$urlPrefix/satpahar.jpg',
+  ),
+  Location(
+    name: 'Lugu Buru Ghantabari',
+    place: 'Jharkhand, India',
+    imageUrl: '$urlPrefix/lugu_buru.jpg',
+  ),
+  Location(
+    name: 'Panchghagh Falls',
+    place: 'Jharkhand, India',
+    imageUrl: '$urlPrefix/panchghagh_falls.jpg',
+  ),
+  Location(
+    name: 'Tanginath',
+    place: 'Jharkhand, India',
+    imageUrl: '$urlPrefix/tanginath.jpg',
+  ),
+  Location(
+    name: 'Chandil Dam',
+    place: 'Jharkhand, India',
+    imageUrl: '$urlPrefix/chandil_dam.jpg',
+  ),
+  Location(
     name: 'Spiti Valley',
     place: 'Himachal Pradesh, India',
     imageUrl: '$urlPrefix/spiti-valley.jpg',
