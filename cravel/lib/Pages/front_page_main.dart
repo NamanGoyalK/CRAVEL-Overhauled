@@ -1,7 +1,6 @@
 import 'package:cravel/Pages/SubPages/density_page.dart';
 import 'package:cravel/Pages/SubPages/home_page.dart';
 import 'package:cravel/Pages/SubPages/report_page.dart';
-import 'package:cravel/Pages/SubPages/search_page.dart';
 import 'package:cravel/Pages/more_page.dart';
 import 'package:flutter/material.dart';
 

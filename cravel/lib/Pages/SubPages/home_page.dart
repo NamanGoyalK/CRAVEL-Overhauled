@@ -28,7 +28,6 @@ class HomePageMainState extends State<HomePage> {
             elevation: 0,
             backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             title: const Text('Our Suggestions !',
-                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Color.fromARGB(255, 0, 0, 0),
                   fontSize: 22,
@@ -135,7 +134,7 @@ class HomePageMainState extends State<HomePage> {
                         },
                       ),
               ),
-              const SizedBox(width: 12),
+              if (isDropdownVisible) const SizedBox(width: 12),
             ],
           ),
           SliverList(
