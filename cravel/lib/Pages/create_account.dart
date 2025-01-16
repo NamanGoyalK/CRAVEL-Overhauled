@@ -390,38 +390,7 @@ class _CreateAccountState extends State<CreateAccount> {
     return Align(
       alignment: Alignment.center,
       child: TextButton(
-        onPressed: () async {
-          if (emailController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Email cannot be empty")));
-            return;
-          }
-          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
-              .hasMatch(emailController.text)) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  "Enter a valid email",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 14,
-                    color: Color.fromARGB(255, 245, 245, 245),
-                  ),
-                ),
-              ),
-            );
-          }
-
-          // FirebaseAuth.instance.currentEmail.sendEmailVerification();
-          if (await EmailOTP.sendOTP(email: emailController.text)) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("OTP has been sent")));
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Failed to send OTP")));
-          }
-        },
+        onPressed: sendOTP,
         style: ButtonStyle(
           overlayColor: WidgetStateProperty.resolveWith<Color?>(
             (Set<WidgetState> states) {
@@ -451,6 +420,39 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
       ),
     );
+  }
+
+  void sendOTP() async {
+    if (emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Email cannot be empty")));
+      return;
+    }
+    if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+        .hasMatch(emailController.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Enter a valid email",
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontStyle: FontStyle.normal,
+              fontSize: 14,
+              color: Color.fromARGB(255, 245, 245, 245),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // FirebaseAuth.instance.currentEmail.sendEmailVerification();
+    if (await EmailOTP.sendOTP(email: emailController.text)) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("OTP has been sent")));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Failed to send OTP")));
+    }
   }
 
   Padding signUpButton(BuildContext context) {
